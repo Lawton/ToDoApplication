@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="732b95f4-7bfe-4ad6-8d1a-52d8258699d0" name="Default" comment="" />
+    <list default="true" id="732b95f4-7bfe-4ad6-8d1a-52d8258699d0" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToDoApplication/app/src/main/res/layout/content_scrolling.xml" afterPath="$PROJECT_DIR$/ToDoApplication/app/src/main/res/layout/content_scrolling.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="ToDoApplication.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
