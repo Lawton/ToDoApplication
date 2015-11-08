@@ -2,14 +2,19 @@ package ca.lawtonspelliscy.todoapplication;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class DayToDoList extends AppCompatActivity {
+
+    private ListView toDoListView;
+    private ToDoItemArrayAdapter dayListArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,12 +23,21 @@ public class DayToDoList extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        this.toDoListView = (ListView) findViewById(R.id.day_content_list);
+        final ArrayList<ToDoItem> toDoItemsArrayList = new ArrayList<ToDoItem>();
+        this.dayListArrayAdapter = new ToDoItemArrayAdapter(this, toDoItemsArrayList);
+        this.toDoListView.setAdapter(this.dayListArrayAdapter);
+
+
+
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_item);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                toDoItemsArrayList.add(new ToDoItem("example", "example"));
+                dayListArrayAdapter.notifyDataSetChanged();
+
             }
         });
     }
