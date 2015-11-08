@@ -36,6 +36,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="3dip"
-        android:src="@mipmap/ic_launcher" />
+        android:layout_marginRight="6dip"
+        android:src="@android:drawable/checkbox_off_background" />
 </RelativeLayout>

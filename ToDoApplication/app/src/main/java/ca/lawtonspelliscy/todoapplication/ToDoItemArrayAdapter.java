@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -31,6 +32,14 @@ public class ToDoItemArrayAdapter extends ArrayAdapter{
         View rowView = inflater.inflate(R.layout.task_row, parent, false);
         TextView subjectField = (TextView)rowView.findViewById(R.id.row_subject);
         TextView descriptionField = (TextView)rowView.findViewById(R.id.row_description);
+
+        final ImageView checkboxImageView = (ImageView)rowView.findViewById(R.id.row_complete);
+        checkboxImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkboxImageView.setImageResource(android.R.drawable.checkbox_on_background);
+            }
+        });
 
         //Set fields --currently set for testing but should eventually use actual values
         //TODO actually
