@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -30,8 +29,8 @@ public class ToDoItemArrayAdapter extends ArrayAdapter{
         //TODO implement getview
         LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.task_row, parent, false);
-        TextView subjectField = (TextView)rowView.findViewById(R.id.row_subject);
-        TextView descriptionField = (TextView)rowView.findViewById(R.id.row_description);
+        //TextView subjectField = (TextView)rowView.findViewById(R.id.row_subject);
+        //TextView descriptionField = (TextView)rowView.findViewById(R.id.row_description);
 
         final ImageView checkboxImageView = (ImageView)rowView.findViewById(R.id.row_complete);
         checkboxImageView.setOnClickListener(new View.OnClickListener() {
@@ -43,8 +42,8 @@ public class ToDoItemArrayAdapter extends ArrayAdapter{
 
         //Set fields --currently set for testing but should eventually use actual values
         //TODO actually
-        subjectField.setText("Great Job");
-        descriptionField.setText("My App does something!");
+        //subjectField.setText("Great Job");
+        //descriptionField.setText("My App does something!");
 
         return rowView;
     }
