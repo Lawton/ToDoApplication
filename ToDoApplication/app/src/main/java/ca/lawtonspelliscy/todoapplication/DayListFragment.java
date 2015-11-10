@@ -87,12 +87,10 @@ public class DayListFragment extends Fragment implements AbsListView.OnItemClick
         // Set the adapter
         mListView = (ListView)view.findViewById(R.id.day_content_list);
 
-        mToDoItems.add(new ToDoItem("example", "example"));
-        mToDoItems.add(new ToDoItem("example", "example"));
-        mToDoItems.add(new ToDoItem("example", "example"));
-        mToDoItems.add(new ToDoItem("example", "example"));
         mListView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
+
+        this.setEmptyText("Nothing ToDo today!");
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
