@@ -34,6 +34,7 @@ public class ToDoItemArrayAdapter extends ArrayAdapter{
     public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.task_row, parent, false);
+
         //TODO once we have a fragment for entering the description and subject need to properly populate those fields
         //TextView subjectField = (TextView)rowView.findViewById(R.id.row_subject);
         //TextView descriptionField = (TextView)rowView.findViewById(R.id.row_description);
@@ -52,6 +53,11 @@ public class ToDoItemArrayAdapter extends ArrayAdapter{
                 }
             }
         });
+        if(mValues.get(position).isComplete()) {
+            checkboxImageView.setImageResource(android.R.drawable.checkbox_on_background);
+        }else {
+            checkboxImageView.setImageResource(android.R.drawable.checkbox_off_background);
+        }
 
         return rowView;
     }
