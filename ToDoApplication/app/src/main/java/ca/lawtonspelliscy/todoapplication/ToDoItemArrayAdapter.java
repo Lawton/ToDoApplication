@@ -18,6 +18,12 @@ public class ToDoItemArrayAdapter extends ArrayAdapter{
     private final Context mContext;
     private ArrayList<ToDoItem> mValues;
 
+    /**
+     * Custom Array adapter shows the subject and description of the to-do item as well as a
+     * checkbox whether the item is complete or not.
+     * @param context context of the array adapter
+     * @param values list of each to-do item currently set for that day
+     */
     public ToDoItemArrayAdapter(Context context, ArrayList<ToDoItem> values) {
         super(context, R.layout.task_row, values);
         this.mContext = context;
@@ -26,9 +32,9 @@ public class ToDoItemArrayAdapter extends ArrayAdapter{
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        //TODO implement getview
         LayoutInflater inflater = (LayoutInflater) this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.task_row, parent, false);
+        //TODO once we have a fragment for entering the description and subject need to properly populate those fields
         //TextView subjectField = (TextView)rowView.findViewById(R.id.row_subject);
         //TextView descriptionField = (TextView)rowView.findViewById(R.id.row_description);
 
@@ -36,7 +42,7 @@ public class ToDoItemArrayAdapter extends ArrayAdapter{
         checkboxImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //Check box selectable here set to copmlete or uncomplete
                 if(mValues.get(position).isComplete()) {
                     checkboxImageView.setImageResource(android.R.drawable.checkbox_off_background);
                     mValues.get(position).setComplete(false);
@@ -46,11 +52,6 @@ public class ToDoItemArrayAdapter extends ArrayAdapter{
                 }
             }
         });
-
-        //Set fields --currently set for testing but should eventually use actual values
-        //TODO actually
-        //subjectField.setText("Great Job");
-        //descriptionField.setText("My App does something!");
 
         return rowView;
     }

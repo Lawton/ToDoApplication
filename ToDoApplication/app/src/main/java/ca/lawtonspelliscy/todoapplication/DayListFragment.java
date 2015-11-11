@@ -26,13 +26,10 @@ import java.util.Calendar;
  */
 public class DayListFragment extends Fragment implements AbsListView.OnItemClickListener {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private final ArrayList<ToDoItem> mToDoItems = new ArrayList<ToDoItem>();
 
-    // TODO: Rename and change types of parameters
+    //To store the date that the daylist represents
     private Calendar mDate;
 
     private OnFragmentInteractionListener mListener;
@@ -40,15 +37,12 @@ public class DayListFragment extends Fragment implements AbsListView.OnItemClick
     /**
      * The fragment's ListView/GridView.
      */
-    //private AbsListView mListView;
     private ListView mListView;
 
     /**
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    //private ListAdapter mAdapter;
-
     private ToDoItemArrayAdapter mAdapter;
 
     // TODO: Rename and change types of parameters
@@ -75,7 +69,6 @@ public class DayListFragment extends Fragment implements AbsListView.OnItemClick
         super.onCreate(savedInstanceState);
 
 
-        // TODO: Change Adapter to display your content
         mAdapter = new ToDoItemArrayAdapter(this.getActivity().getApplicationContext(), mToDoItems);
     }
 
@@ -90,6 +83,7 @@ public class DayListFragment extends Fragment implements AbsListView.OnItemClick
         mListView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
+        //TODO get the empty text to display when list is empty
         this.setEmptyText("Nothing ToDo today!");
 
         // Set OnItemClickListener so we can be notified on item clicks

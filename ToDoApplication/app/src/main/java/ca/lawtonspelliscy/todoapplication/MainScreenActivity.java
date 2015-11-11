@@ -1,5 +1,7 @@
 package ca.lawtonspelliscy.todoapplication;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,15 +21,18 @@ public class MainScreenActivity extends AppCompatActivity implements DayListFrag
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*
-        this.toDoListView = (ListView) findViewById(R.id.day_content_list);
-        final ArrayList<ToDoItem> toDoItemsArrayList = new ArrayList<ToDoItem>();
-        this.dayListArrayAdapter = new ToDoItemArrayAdapter(this, toDoItemsArrayList);
-        this.toDoListView.setAdapter(this.dayListArrayAdapter);
+        //dynamically add the fragment to the mainscreen
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        DayListFragment dayListFragment = new DayListFragment();
+
+        fragmentTransaction.add(R.id.main_fragment_container, dayListFragment);
+        fragmentTransaction.commit();
 
 
-
-
+        //TODO Eventually move floating action bar to main activity instead of fragment
+        /* For simplicity I moved the FAB to the DayListFragment but I think it would be better to
+        have it on the main activity so that it is consitent for calendar and day view
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_item);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -18,6 +18,12 @@ public class ToDoItem {
     private String mDescription;
     private boolean mComplete;
 
+    /**
+     * Simple object that contains the subject, description and completion state of a to-do item.
+     * The completion state defaults to false.
+     * @param subject The subject of the to-do item
+     * @param description The description of the to-do item
+     */
     public ToDoItem(String subject, String description) {
         this.mDescription = description;
         this.mSubject = subject;
