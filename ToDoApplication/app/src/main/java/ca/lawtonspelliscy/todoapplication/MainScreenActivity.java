@@ -73,5 +73,9 @@ public class MainScreenActivity extends AppCompatActivity implements DayListFrag
     @Override
     public void onFragmentInteraction(String id) {
 
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        ItemDialog itemDialog = new ItemDialog();
+        itemDialog.show(fragmentTransaction, "test");
+
     }
 }
