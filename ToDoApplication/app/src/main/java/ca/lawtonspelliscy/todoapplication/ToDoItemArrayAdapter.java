@@ -42,7 +42,7 @@ public class ToDoItemArrayAdapter extends ArrayAdapter{
         checkboxImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Check box selectable here set to copmlete or uncomplete
+                //Check box selectable here set to complete or uncomplete
                 if(mValues.get(position).isComplete()) {
                     checkboxImageView.setImageResource(android.R.drawable.checkbox_off_background);
                     mValues.get(position).setComplete(false);

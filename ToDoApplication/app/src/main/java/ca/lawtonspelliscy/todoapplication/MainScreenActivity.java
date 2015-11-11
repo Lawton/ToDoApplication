@@ -21,13 +21,16 @@ public class MainScreenActivity extends AppCompatActivity implements DayListFrag
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //dynamically add the fragment to the mainscreen
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        DayListFragment dayListFragment = new DayListFragment();
+        //only add fragment if not recreating activity
+        if(savedInstanceState == null) {
+            //dynamically add the fragment to the mainscreen
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            DayListFragment dayListFragment = new DayListFragment();
 
-        fragmentTransaction.add(R.id.main_fragment_container, dayListFragment);
-        fragmentTransaction.commit();
+            fragmentTransaction.add(R.id.main_fragment_container, dayListFragment);
+            fragmentTransaction.commit();
+        }
 
 
         //TODO Eventually move floating action bar to main activity instead of fragment

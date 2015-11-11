@@ -81,10 +81,9 @@ public class ToDoItem implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        int boolToInt = (mComplete) ? 1: 0;
         dest.writeString(mDescription);
         dest.writeString(mSubject);
-        dest.writeInt(boolToInt);
+        dest.writeInt((mComplete) ? 1: 0); //caste boolean to integer
 
     }
 
