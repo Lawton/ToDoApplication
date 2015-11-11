@@ -1,5 +1,8 @@
 package ca.lawtonspelliscy.todoapplication;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by lawton on 15-11-07.
  * Simple class to contain whatever is need in each item in the to-do list
@@ -11,7 +14,7 @@ package ca.lawtonspelliscy.todoapplication;
  * completion
  *
  */
-public class ToDoItem {
+public class ToDoItem implements Parcelable{
 
 
     private String mSubject;
@@ -29,6 +32,8 @@ public class ToDoItem {
         this.mSubject = subject;
         this.mComplete =false;
     }
+
+
 
 
     public String getSubject() {
@@ -53,5 +58,41 @@ public class ToDoItem {
 
     public void setComplete(boolean complete) {
         this.mComplete = complete;
+    }
+
+    public static final Parcelable.Creator<ToDoItem> CREATOR =
+            new Parcelable.Creator<ToDoItem>(){
+
+                @Override
+                public ToDoItem createFromParcel(Parcel source) {
+                    return new ToDoItem(source);
+                }
+
+                @Override
+                public ToDoItem[] newArray(int size) {
+                    return new ToDoItem[size];
+                }
+            };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        int boolToInt = (mComplete) ? 1: 0;
+        dest.writeString(mDescription);
+        dest.writeString(mSubject);
+        dest.writeInt(boolToInt);
+
+    }
+
+    private ToDoItem(Parcel in) {
+
+        mDescription = in.readString();
+        mSubject = in.readString();
+        mComplete = in.readInt() == 1;
+
     }
 }

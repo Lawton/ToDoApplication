@@ -26,8 +26,10 @@ import java.util.Calendar;
  */
 public class DayListFragment extends Fragment implements AbsListView.OnItemClickListener {
 
+    private static String LISTKEY = "DayListKey";
+
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private final ArrayList<ToDoItem> mToDoItems = new ArrayList<ToDoItem>();
+    private ArrayList<ToDoItem> mToDoItems;
 
     //To store the date that the daylist represents
     private Calendar mDate;
@@ -69,7 +71,21 @@ public class DayListFragment extends Fragment implements AbsListView.OnItemClick
         super.onCreate(savedInstanceState);
 
 
+        if(savedInstanceState == null) {
+            mToDoItems = new ArrayList<ToDoItem>();
+        } else {
+            mToDoItems = savedInstanceState.getParcelableArrayList(LISTKEY);
+        }
+
         mAdapter = new ToDoItemArrayAdapter(this.getActivity().getApplicationContext(), mToDoItems);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putParcelableArrayList(LISTKEY, mToDoItems);
+
     }
 
     @Override
