@@ -1,7 +1,9 @@
 package ca.lawtonspelliscy.todoapplication;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -25,6 +27,8 @@ import java.util.Calendar;
  * interface.
  */
 public class DayListFragment extends Fragment implements AbsListView.OnItemClickListener {
+
+    private static int REQUEST_CODE = 1;
 
     private static String LISTKEY = "DayListKey";
 
@@ -109,13 +113,30 @@ public class DayListFragment extends Fragment implements AbsListView.OnItemClick
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mToDoItems.add(new ToDoItem("example", "example"));
-                mAdapter.notifyDataSetChanged();
+                //mToDoItems.add(new ToDoItem("example", "example"));
+                //mAdapter.notifyDataSetChanged();
+                addItem();
+
 
             }
         });
 
         return view;
+    }
+
+    private void addItem() {
+        FragmentManager fragmentManager = getFragmentManager();
+        ItemDialog itemDialog = new ItemDialog();
+        itemDialog.setTargetFragment(this, REQUEST_CODE);
+        itemDialog.show(fragmentManager, "Item Dialog");
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String subject = data.getStringExtra(ItemDialog.DIALOG_SUBJECT);
+        String description = data.getStringExtra(ItemDialog.DIALOG_DESCRIPTION);
+        mToDoItems.add(new ToDoItem(subject, description));
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
