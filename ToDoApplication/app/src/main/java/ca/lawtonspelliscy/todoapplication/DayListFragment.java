@@ -113,28 +113,35 @@ public class DayListFragment extends Fragment implements AbsListView.OnItemClick
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //mToDoItems.add(new ToDoItem("example", "example"));
-                //mAdapter.notifyDataSetChanged();
-                addItem("","", -1);
-
-
+                addItem();
             }
         });
 
         return view;
     }
 
+    /**
+     * Add or edit item in the listview. This will bring up the item Dialog to edit or create a new
+     * entry in the listview.
+     * @param subject - subject text of the item
+     * @param description - the description text of the item
+     * @param position - position of the item in the arraylist
+     */
     private void addItem(String subject, String description, int position) {
         FragmentManager fragmentManager = getFragmentManager();
-        ItemDialog itemDialog = new ItemDialog();
-        Bundle args = new Bundle();
+        ItemDialog itemDialog = ItemDialog.newInstance(subject, description, position);
 
-        args.putString(ItemDialog.ITEM_SUBJECT, subject);
-        args.putString(itemDialog.ITEM_DESCRIPTION, description);
-        args.putInt(ItemDialog.ITEM_POSITION, position);
-        itemDialog.setArguments(args);
+        //Pass the request code and open the Item Fragment
         itemDialog.setTargetFragment(this, REQUEST_CODE);
         itemDialog.show(fragmentManager, "Item Dialog");
+    }
+
+    /**
+     * Add or edit item in the listview. This will bring up the item Dialog to edit or create a new
+     * entry in the listview.
+     */
+    private void addItem() {
+        addItem("","",-1);
     }
 
     @Override

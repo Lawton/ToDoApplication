@@ -31,6 +31,29 @@ public class ItemDialog extends DialogFragment {
 
     }
 
+    /**
+     * Creates a new instance of ItemDialog with arguments set.
+     * @param subject the subject of the item. If the dialog is editing an existing item pass the subject - otherwise
+     *                use an empty string
+     * @param description the description of the item. If the dialog is editing an existing item pass the
+     *                    description field text otherwise use an empty string.
+     * @param position the position of the item in the listview. If the item is new pass -1.
+     * @return a new instance of ItemDialog with its arguments set.
+     */
+    public static ItemDialog newInstance(String subject, String description, int position) {
+        ItemDialog fragment = new ItemDialog();
+
+        //Create bundle for arguments and pass them to the new fragment
+        Bundle args = new Bundle();
+        args.putString(ITEM_SUBJECT, subject);
+        args.putString(ITEM_DESCRIPTION, description);
+        args.putInt(ITEM_POSITION, position);
+        fragment.setArguments(args);
+
+        //return new instance of ItemDialog
+        return fragment;
+    }
+
     @Override
     public void setArguments(Bundle args) {
         super.setArguments(args);
@@ -50,6 +73,7 @@ public class ItemDialog extends DialogFragment {
     public void onStart() {
         super.onStart();
         Dialog d = getDialog();
+        //Make sure that the dialog is fullscreen
         if(d !=null) {
             d.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         }
