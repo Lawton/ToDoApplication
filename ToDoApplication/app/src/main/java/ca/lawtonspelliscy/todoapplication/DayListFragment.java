@@ -115,7 +115,7 @@ public class DayListFragment extends Fragment implements AbsListView.OnItemClick
             public void onClick(View view) {
                 //mToDoItems.add(new ToDoItem("example", "example"));
                 //mAdapter.notifyDataSetChanged();
-                addItem();
+                addItem("","", -1);
 
 
             }
@@ -124,18 +124,30 @@ public class DayListFragment extends Fragment implements AbsListView.OnItemClick
         return view;
     }
 
-    private void addItem() {
+    private void addItem(String subject, String description, int position) {
         FragmentManager fragmentManager = getFragmentManager();
         ItemDialog itemDialog = new ItemDialog();
+        Bundle args = new Bundle();
+
+        args.putString(ItemDialog.ITEM_SUBJECT, subject);
+        args.putString(itemDialog.ITEM_DESCRIPTION, description);
+        args.putInt(ItemDialog.ITEM_POSITION, position);
+        itemDialog.setArguments(args);
         itemDialog.setTargetFragment(this, REQUEST_CODE);
         itemDialog.show(fragmentManager, "Item Dialog");
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String subject = data.getStringExtra(ItemDialog.DIALOG_SUBJECT);
-        String description = data.getStringExtra(ItemDialog.DIALOG_DESCRIPTION);
-        mToDoItems.add(new ToDoItem(subject, description));
+        String subject = data.getStringExtra(ItemDialog.ITEM_SUBJECT);
+        String description = data.getStringExtra(ItemDialog.ITEM_DESCRIPTION);
+        int position = data.getIntExtra(ItemDialog.ITEM_POSITION, -1);
+        if(position == -1) {
+            mToDoItems.add(new ToDoItem(subject, description));
+        } else {
+            mToDoItems.set(position, new ToDoItem(subject, description));
+        }
+
         mAdapter.notifyDataSetChanged();
     }
 
@@ -158,11 +170,17 @@ public class DayListFragment extends Fragment implements AbsListView.OnItemClick
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        /*
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
             mListener.onFragmentInteraction("hello");
         }
+        */
+        String description = mToDoItems.get(position).getDescription();
+        String subject = mToDoItems.get(position).getSubject();
+        addItem(subject, description, position);
+
     }
 
     /**
