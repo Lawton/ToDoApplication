@@ -1,4 +1,4 @@
-package ca.lawtonspelliscy.todoapplication;
+package ca.lawtonspelliscy.todoapplication.Data;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import ca.lawtonspelliscy.todoapplication.Data.ToDoItem;
+import ca.lawtonspelliscy.todoapplication.R;
 
 /**
  * Created by lawton on 15-11-07.

@@ -1,4 +1,4 @@
-package ca.lawtonspelliscy.todoapplication;
+package ca.lawtonspelliscy.todoapplication.View;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -16,6 +16,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import ca.lawtonspelliscy.todoapplication.Data.ToDoItem;
+import ca.lawtonspelliscy.todoapplication.R;
+import ca.lawtonspelliscy.todoapplication.Data.ToDoItemArrayAdapter;
 
 /**
  * A fragment representing a list of Items.

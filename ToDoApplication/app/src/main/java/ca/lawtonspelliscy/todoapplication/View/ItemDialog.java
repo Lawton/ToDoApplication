@@ -1,4 +1,4 @@
-package ca.lawtonspelliscy.todoapplication;
+package ca.lawtonspelliscy.todoapplication.View;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import ca.lawtonspelliscy.todoapplication.R;
 
 
 public class ItemDialog extends DialogFragment {
@@ -84,10 +86,12 @@ public class ItemDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_item, container, false);
         TextView saveText = (TextView)view.findViewById(R.id.item_save);
 
+        //Get the subject editText box and set the text if subject was passed
         mSubjectText = (EditText)view.findViewById(R.id.item_subject);
         if(mSubject!= null){
             mSubjectText.setText(mSubject);
         }
+        //Get the description editText box and set the text if the description was passed
         mDescriptionText = (EditText)view.findViewById(R.id.item_description);
         if(mDescription!=null) {
             mDescriptionText.setText(mDescription);

@@ -1,4 +1,4 @@
-package ca.lawtonspelliscy.todoapplication;
+package ca.lawtonspelliscy.todoapplication.View;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -8,6 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+
+import ca.lawtonspelliscy.todoapplication.R;
+import ca.lawtonspelliscy.todoapplication.Data.ToDoItemArrayAdapter;
 
 public class MainScreenActivity extends AppCompatActivity implements DayListFragment.OnFragmentInteractionListener{
 

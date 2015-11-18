@@ -1,4 +1,4 @@
-package ca.lawtonspelliscy.todoapplication;
+package ca.lawtonspelliscy.todoapplication.Data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
