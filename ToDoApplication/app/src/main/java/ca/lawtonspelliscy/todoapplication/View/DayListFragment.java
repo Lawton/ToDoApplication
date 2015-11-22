@@ -15,8 +15,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
+import ca.lawtonspelliscy.todoapplication.Data.ToDoDbHelper;
 import ca.lawtonspelliscy.todoapplication.Data.ToDoItem;
 import ca.lawtonspelliscy.todoapplication.R;
 import ca.lawtonspelliscy.todoapplication.Data.ToDoItemArrayAdapter;
@@ -80,12 +82,18 @@ public class DayListFragment extends Fragment implements AbsListView.OnItemClick
 
 
         if(savedInstanceState == null) {
-            mToDoItems = new ArrayList<ToDoItem>();
+            mToDoItems = getItems();
+
         } else {
             mToDoItems = savedInstanceState.getParcelableArrayList(LISTKEY);
         }
 
         mAdapter = new ToDoItemArrayAdapter(this.getActivity().getApplicationContext(), mToDoItems);
+    }
+
+    private ArrayList<ToDoItem> getItems() {
+        ToDoItem[] arrayItems = new ToDoDbHelper(getActivity().getApplication()).readItems();
+        return new ArrayList<>(Arrays.asList(arrayItems));
     }
 
     @Override
@@ -153,11 +161,16 @@ public class DayListFragment extends Fragment implements AbsListView.OnItemClick
         String subject = data.getStringExtra(ItemDialog.ITEM_SUBJECT);
         String description = data.getStringExtra(ItemDialog.ITEM_DESCRIPTION);
         int position = data.getIntExtra(ItemDialog.ITEM_POSITION, -1);
+        ToDoItem item = new ToDoItem(subject, description);
+
         if(position == -1) {
-            mToDoItems.add(new ToDoItem(subject, description));
+            mToDoItems.add(item);
         } else {
-            mToDoItems.set(position, new ToDoItem(subject, description));
+            mToDoItems.set(position, item);
         }
+
+
+        new ToDoDbHelper(getActivity().getApplication()).insertItem(item);
 
         mAdapter.notifyDataSetChanged();
     }

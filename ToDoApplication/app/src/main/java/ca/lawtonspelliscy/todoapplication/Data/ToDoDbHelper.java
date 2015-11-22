@@ -2,6 +2,7 @@ package ca.lawtonspelliscy.todoapplication.Data;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -32,10 +33,15 @@ public class ToDoDbHelper extends SQLiteOpenHelper{
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_ITEM
                 + " ( " + COLUMN_SUBJECT + " TEXT PRIMARY KEY NOT NULL, "
                 + COLUMN_COMPLETE + " INT NOT NULL, "
-                + COLUMN_DESCRIPTION + " TEXT, "
+                + COLUMN_DESCRIPTION + " TEXT "
                 + ")");
     }
 
+    /**
+     * Insert item into the database to store all to-do items in the application
+     * @param item the item that is to be added to the database
+     * @return whether the insert was successful or not
+     */
     public boolean insertItem(ToDoItem item) {
         boolean insertSuccessful = false;
 
@@ -51,6 +57,42 @@ public class ToDoDbHelper extends SQLiteOpenHelper{
         db.close();
 
         return insertSuccessful;
+    }
+
+    public ToDoItem[] readItems() {
+        boolean successful = false;
+
+        String [] columns = {
+                COLUMN_COMPLETE,
+                COLUMN_DESCRIPTION,
+                COLUMN_SUBJECT
+        };
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_ITEM,
+                columns,
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        ToDoItem[] items = new ToDoItem[cursor.getCount()];
+        cursor.moveToFirst();
+        for(int i=0; !cursor.isAfterLast(); i++) {
+            ToDoItem item = new ToDoItem(null, null);
+            item.setSubject(cursor.getString(cursor.getColumnIndex(COLUMN_SUBJECT)));
+            item.setDescription(cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION)));
+            item.setComplete(cursor.getInt(cursor.getColumnIndex(COLUMN_COMPLETE))==1);
+            items[i] = item;
+            cursor.moveToNext();
+        }
+
+        //We are done reading from the cursor so closing (leave this at the bottom of the class)
+        cursor.close();
+        return items;
+
     }
 
     @Override
