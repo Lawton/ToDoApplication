@@ -56,6 +56,10 @@ public class ToDoItem implements Parcelable{
         return mComplete;
     }
 
+    public int getComplete() {
+        return mComplete ?1:0;
+    }
+
     public void setComplete(boolean complete) {
         this.mComplete = complete;
     }
@@ -83,7 +87,7 @@ public class ToDoItem implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mDescription);
         dest.writeString(mSubject);
-        dest.writeInt((mComplete) ? 1: 0); //caste boolean to integer
+        dest.writeInt(this.getComplete()); //caste boolean to integer
 
     }
 
