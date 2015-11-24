@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
+ * This class is used to connect to SQLite DB on phone. Will create DB if necessarry and read and
+ * write to the DB.
  * Created by lawton on 15-11-17.
  */
 public class ToDoDbHelper extends SQLiteOpenHelper{
@@ -45,6 +47,7 @@ public class ToDoDbHelper extends SQLiteOpenHelper{
     public boolean insertItem(ToDoItem item) {
         boolean insertSuccessful = false;
 
+        //put values into content values
         ContentValues values = new ContentValues();
 
         values.put(COLUMN_COMPLETE, item.getComplete());
@@ -53,15 +56,21 @@ public class ToDoDbHelper extends SQLiteOpenHelper{
 
         SQLiteDatabase db = this.getWritableDatabase();
 
+        //attempt to insert column and return whether successful
         insertSuccessful = db.insert(TABLE_ITEM, null, values) > 0;
         db.close();
 
         return insertSuccessful;
     }
 
+    /**
+     * get Items saved on phone in database
+     * @return array of to-do items
+     */
     public ToDoItem[] readItems() {
         boolean successful = false;
 
+        //Columns to be used by query
         String [] columns = {
                 COLUMN_COMPLETE,
                 COLUMN_DESCRIPTION,
@@ -70,6 +79,7 @@ public class ToDoDbHelper extends SQLiteOpenHelper{
 
         SQLiteDatabase db = this.getReadableDatabase();
 
+        //currently no where claus on the query just grab all the items
         Cursor cursor = db.query(TABLE_ITEM,
                 columns,
                 null,
@@ -78,6 +88,8 @@ public class ToDoDbHelper extends SQLiteOpenHelper{
                 null,
                 null);
 
+
+        //convert cursor to array and close cursor
         ToDoItem[] items = new ToDoItem[cursor.getCount()];
         cursor.moveToFirst();
         for(int i=0; !cursor.isAfterLast(); i++) {
@@ -91,8 +103,20 @@ public class ToDoDbHelper extends SQLiteOpenHelper{
 
         //We are done reading from the cursor so closing (leave this at the bottom of the class)
         cursor.close();
+        db.close();
         return items;
 
+    }
+
+    public boolean deleteItem(String subject) {
+        boolean successful = false;
+        String whereClaus = COLUMN_SUBJECT + "=" + subject;
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        successful = db.delete(TABLE_ITEM, whereClaus, null)>0;
+        db.close();
+
+        return successful;
     }
 
     @Override
