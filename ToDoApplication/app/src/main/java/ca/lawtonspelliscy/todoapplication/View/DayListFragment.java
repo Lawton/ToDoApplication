@@ -135,13 +135,12 @@ public class DayListFragment extends Fragment implements AbsListView.OnItemClick
     /**
      * Add or edit item in the listview. This will bring up the item Dialog to edit or create a new
      * entry in the listview.
-     * @param subject - subject text of the item
-     * @param description - the description text of the item
+     * @param item - ToDoItem that will be edited or added.
      * @param position - position of the item in the arraylist
      */
-    private void addItem(String subject, String description, int position, int rowid) {
+    private void addItem(ToDoItem item, int position) {
         FragmentManager fragmentManager = getFragmentManager();
-        ItemDialog itemDialog = ItemDialog.newInstance(subject, description, position, rowid);
+        ItemDialog itemDialog = ItemDialog.newInstance(item, position);
 
         //Pass the request code and open the Item Fragment
         itemDialog.setTargetFragment(this, REQUEST_CODE);
@@ -153,26 +152,23 @@ public class DayListFragment extends Fragment implements AbsListView.OnItemClick
      * entry in the listview.
      */
     private void addItem() {
-        addItem("", "", -1, -1);
+        addItem(new ToDoItem("",""), -1);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String subject = data.getStringExtra(ItemDialog.ITEM_SUBJECT);
-        String description = data.getStringExtra(ItemDialog.ITEM_DESCRIPTION);
+        ToDoItem item = data.getParcelableExtra(ItemDialog.ITEM_TAG);
         int position = data.getIntExtra(ItemDialog.ITEM_POSITION, -1);
-        int rowid = data.getIntExtra(ItemDialog.ITEM_ROWID, -1);
 
         if(resultCode == ItemDialog.RESULT_CODE_DELETE){
-            if(position !=-1 && rowid !=-1) {//nothing to delete so do nothing
+            if(position !=-1) {//nothing to delete so do nothing
                 mToDoItems.remove(position);
-                new ToDoDbHelper((getActivity().getApplication())).deleteItem(rowid);
+                new ToDoDbHelper((getActivity().getApplication())).deleteItem(item.getRowid());
                 mAdapter.notifyDataSetChanged();
             }
 
         }
          else if(resultCode == ItemDialog.RESULT_CODE) {
-            ToDoItem item = new ToDoItem(subject, description);
 
             if (position == -1) {
                 mToDoItems.add(item);
@@ -213,10 +209,7 @@ public class DayListFragment extends Fragment implements AbsListView.OnItemClick
             mListener.onFragmentInteraction("hello");
         }
         */
-        String description = mToDoItems.get(position).getDescription();
-        String subject = mToDoItems.get(position).getSubject();
-        int rowid = mToDoItems.get(position).getRowid();
-        addItem(subject, description, position, rowid);
+        addItem(mToDoItems.get(position), position);
 
     }
 

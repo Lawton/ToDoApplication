@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import ca.lawtonspelliscy.todoapplication.Data.ToDoItem;
 import ca.lawtonspelliscy.todoapplication.R;
 
 
@@ -20,6 +21,7 @@ public class ItemDialog extends DialogFragment {
     public static String ITEM_SUBJECT = "Subject";
     public static String ITEM_POSITION  = "Position";
     public static String ITEM_ROWID = "rowid";
+    public static String ITEM_TAG = "todoItem";
     public static int RESULT_CODE = 2;
     public static int RESULT_CODE_DELETE = 3;
 
@@ -30,6 +32,7 @@ public class ItemDialog extends DialogFragment {
     private String mDescription;
     private int mPosition;
     private int mRowid;
+    private ToDoItem mItem;
 
 
     public ItemDialog() {
@@ -47,28 +50,40 @@ public class ItemDialog extends DialogFragment {
      */
     public static ItemDialog newInstance(String subject, String description, int position, int rowid) {
         ItemDialog fragment = new ItemDialog();
+        ToDoItem item = new ToDoItem(subject, description);
+        item.setRowid(rowid);
+
 
         //Create bundle for arguments and pass them to the new fragment
         Bundle args = new Bundle();
-        args.putString(ITEM_SUBJECT, subject);
-        args.putString(ITEM_DESCRIPTION, description);
+        args.putParcelable(ITEM_TAG, item);
         args.putInt(ITEM_POSITION, position);
-        args.putInt(ITEM_ROWID, rowid);
         fragment.setArguments(args);
 
         //return new instance of ItemDialog
         return fragment;
     }
 
+    public static ItemDialog newInstance(ToDoItem item, int position) {
+        ItemDialog fragment = new ItemDialog();
+
+        ToDoItem newItem = new ToDoItem(item.getSubject(), item.getDescription());
+        newItem.setRowid(item.getRowid());
+        newItem.setComplete(item.isComplete());
+
+        Bundle args = new Bundle();
+        args.putParcelable(ITEM_TAG, newItem);
+        args.putInt(ITEM_POSITION, position);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
     @Override
     public void setArguments(Bundle args) {
         super.setArguments(args);
-        mSubject = args.getString(ITEM_SUBJECT);
-        mDescription = args.getString(ITEM_DESCRIPTION);
+        mItem = args.getParcelable(ITEM_TAG);
         mPosition = args.getInt(ITEM_POSITION, -1);
-        mRowid = args.getInt(ITEM_ROWID, -1);
-
-
     }
 
     @Override
@@ -92,17 +107,17 @@ public class ItemDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_item, container, false);
         TextView saveText = (TextView)view.findViewById(R.id.item_save);
         TextView deleteText = (TextView)view.findViewById(R.id.item_delete);
+        if(mItem == null) { //didn't create dialog with new instance so initialize ToDoItem
+            mItem = new ToDoItem("","");
+        }
+
 
         //Get the subject editText box and set the text if subject was passed
         mSubjectText = (EditText)view.findViewById(R.id.item_subject);
-        if(mSubject!= null){
-            mSubjectText.setText(mSubject);
-        }
+        mSubjectText.setText(mItem.getSubject());
         //Get the description editText box and set the text if the description was passed
         mDescriptionText = (EditText)view.findViewById(R.id.item_description);
-        if(mDescription!=null) {
-            mDescriptionText.setText(mDescription);
-        }
+        mDescriptionText.setText(mItem.getDescription());
 
         saveText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,10 +154,10 @@ public class ItemDialog extends DialogFragment {
 
     private Intent createIntent() {
         Intent intent = new Intent();
-        intent.putExtra(ITEM_DESCRIPTION, mDescriptionText.getText().toString());
-        intent.putExtra(ITEM_SUBJECT, mSubjectText.getText().toString());
+        mItem.setSubject(mSubjectText.getText().toString());
+        mItem.setDescription(mDescriptionText.getText().toString());
+        intent.putExtra(ITEM_TAG, mItem);
         intent.putExtra(ITEM_POSITION, mPosition);
-        intent.putExtra(ITEM_ROWID,mRowid);
         return intent;
     }
 
