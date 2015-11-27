@@ -39,7 +39,7 @@ public class ToDoItemArrayAdapter extends ArrayAdapter{
         final View rowView = inflater.inflate(R.layout.task_row, parent, false);
         final ToDoItem item = mValues.get(position);
 
-        //TODO once we have a fragment for entering the description and subject need to properly populate those fields
+
         TextView subjectField = (TextView)rowView.findViewById(R.id.row_subject);
         TextView descriptionField = (TextView)rowView.findViewById(R.id.row_description);
         subjectField.setText(item.getSubject());

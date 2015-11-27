@@ -170,14 +170,13 @@ public class DayListFragment extends Fragment implements AbsListView.OnItemClick
         }
          else if(resultCode == ItemDialog.RESULT_CODE) {
 
-            if (position == -1) {
+            if (position == -1) { //new item
                 mToDoItems.add(item);
-            } else {
+                new ToDoDbHelper(getActivity().getApplication()).insertItem(item);
+            } else { //item already exists
                 mToDoItems.set(position, item);
+                new ToDoDbHelper(getActivity().getApplication()).updateItemFull(item);
             }
-
-
-            new ToDoDbHelper(getActivity().getApplication()).insertItem(item);
 
             mAdapter.notifyDataSetChanged();
         }

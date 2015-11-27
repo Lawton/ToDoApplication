@@ -137,17 +137,60 @@ public class ToDoDbHelper extends SQLiteOpenHelper{
         return successful;
     }
 
+    /**
+     * Update whether the item is complete or not in the db
+     * @param complete state of item 1 for complete 0 for uncomplete
+     * @param rowid the rowid of the item to be updates
+     * @return whether any rows were updated successfully
+     */
     public boolean updateItemComplete(int complete, int rowid) {
         boolean successful = false;
-        String strFilter = "rowid=" + rowid;
         ContentValues args = new ContentValues();
-        SQLiteDatabase db = this.getWritableDatabase();
 
+        //arguments to be updated
         args.put(COLUMN_COMPLETE, complete);
 
-        successful = db.update(TABLE_ITEM, args, strFilter, null)>0;
+        successful = updateItem(args, rowid);
 
         return successful;
+    }
+
+    /**
+     * Update description and subject field from item in db
+     * @param item the item to be updated
+     * @return whether any columns were updated
+     */
+    public boolean updateItemFull (ToDoItem item) {
+        boolean successful = false;
+        ContentValues args = new ContentValues();
+
+        //arguments to be updated
+        args.put(COLUMN_DESCRIPTION, item.getDescription());
+        args.put(COLUMN_SUBJECT, item.getSubject());
+
+        successful = updateItem(args, item.getRowid());
+
+        return successful;
+    }
+
+    /**
+     * does the extra few steps for updating an item taking contentvalue arguments and the rowid
+     * to filter on
+     * @param args arguments that are being passed to update statment to be updated
+     * @param rowid the row id that will be used to filter
+     * @return whether the update statement updated any rows
+     */
+    private boolean updateItem(ContentValues args, int rowid) {
+        boolean successful = false;
+        String strFilter = "rowid=" + rowid; //filter we use rowid is unique for each row
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        successful = db.update(TABLE_ITEM, args, strFilter, null)>0; //if less than 0 nothing updated
+        db.close();
+
+        return successful;
+
+
     }
 
     @Override
