@@ -14,7 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class ToDoDbHelper extends SQLiteOpenHelper{
 
 
-    public static final int DATABASE_VERSION =1;
+    public static final int DATABASE_VERSION =2;
     public static final String DATABASE_NAME = "ToDoList.db";
 
     public static final String TABLE_ITEM = "TODOITEMS";
@@ -36,7 +36,7 @@ public class ToDoDbHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_ITEM
-                + " ( " + COLUMN_SUBJECT + " TEXT PRIMARY KEY NOT NULL, "
+                + " ( " + COLUMN_SUBJECT + " TEXT NOT NULL, "
                 + COLUMN_COMPLETE + " INT NOT NULL, "
                 + COLUMN_DESCRIPTION + " TEXT "
                 + ")");
@@ -137,8 +137,22 @@ public class ToDoDbHelper extends SQLiteOpenHelper{
         return successful;
     }
 
+    public boolean updateItemComplete(int complete, int rowid) {
+        boolean successful = false;
+        String strFilter = "rowid=" + rowid;
+        ContentValues args = new ContentValues();
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        args.put(COLUMN_COMPLETE, complete);
+
+        successful = db.update(TABLE_ITEM, args, strFilter, null)>0;
+
+        return successful;
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ITEM);
+        onCreate(db);
     }
 }

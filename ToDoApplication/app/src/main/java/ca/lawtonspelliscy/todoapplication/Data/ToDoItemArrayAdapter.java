@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import ca.lawtonspelliscy.todoapplication.Data.ToDoItem;
 import ca.lawtonspelliscy.todoapplication.R;
 
 /**
@@ -37,13 +36,14 @@ public class ToDoItemArrayAdapter extends ArrayAdapter{
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.task_row, parent, false);
+        final View rowView = inflater.inflate(R.layout.task_row, parent, false);
+        final ToDoItem item = mValues.get(position);
 
         //TODO once we have a fragment for entering the description and subject need to properly populate those fields
         TextView subjectField = (TextView)rowView.findViewById(R.id.row_subject);
         TextView descriptionField = (TextView)rowView.findViewById(R.id.row_description);
-        subjectField.setText(mValues.get(position).getSubject());
-        descriptionField.setText(mValues.get(position).getDescription());
+        subjectField.setText(item.getSubject());
+        descriptionField.setText(item.getDescription());
 
         final ImageView checkboxImageView = (ImageView)rowView.findViewById(R.id.row_complete);
         checkboxImageView.setOnClickListener(new View.OnClickListener() {
@@ -52,14 +52,15 @@ public class ToDoItemArrayAdapter extends ArrayAdapter{
                 //Check box selectable here set to complete or uncomplete
                 if(mValues.get(position).isComplete()) {
                     checkboxImageView.setImageResource(android.R.drawable.checkbox_off_background);
-                    mValues.get(position).setComplete(false);
+                    item.setComplete(false);
                 } else {
                     checkboxImageView.setImageResource(android.R.drawable.checkbox_on_background);
-                    mValues.get(position).setComplete(true);
+                    item.setComplete(true);
                 }
+                new ToDoDbHelper(rowView.getContext()).updateItemComplete(item.getComplete(), item.getRowid());
             }
         });
-        if(mValues.get(position).isComplete()) {
+        if(item.isComplete()) {
             checkboxImageView.setImageResource(android.R.drawable.checkbox_on_background);
         }else {
             checkboxImageView.setImageResource(android.R.drawable.checkbox_off_background);
