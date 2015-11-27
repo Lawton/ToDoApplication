@@ -20,8 +20,8 @@ import java.util.Calendar;
 
 import ca.lawtonspelliscy.todoapplication.Data.ToDoDbHelper;
 import ca.lawtonspelliscy.todoapplication.Data.ToDoItem;
-import ca.lawtonspelliscy.todoapplication.R;
 import ca.lawtonspelliscy.todoapplication.Data.ToDoItemArrayAdapter;
+import ca.lawtonspelliscy.todoapplication.R;
 
 /**
  * A fragment representing a list of Items.
@@ -139,9 +139,9 @@ public class DayListFragment extends Fragment implements AbsListView.OnItemClick
      * @param description - the description text of the item
      * @param position - position of the item in the arraylist
      */
-    private void addItem(String subject, String description, int position) {
+    private void addItem(String subject, String description, int position, int rowid) {
         FragmentManager fragmentManager = getFragmentManager();
-        ItemDialog itemDialog = ItemDialog.newInstance(subject, description, position);
+        ItemDialog itemDialog = ItemDialog.newInstance(subject, description, position, rowid);
 
         //Pass the request code and open the Item Fragment
         itemDialog.setTargetFragment(this, REQUEST_CODE);
@@ -153,7 +153,7 @@ public class DayListFragment extends Fragment implements AbsListView.OnItemClick
      * entry in the listview.
      */
     private void addItem() {
-        addItem("","",-1);
+        addItem("", "", -1, -1);
     }
 
     @Override
@@ -161,18 +161,30 @@ public class DayListFragment extends Fragment implements AbsListView.OnItemClick
         String subject = data.getStringExtra(ItemDialog.ITEM_SUBJECT);
         String description = data.getStringExtra(ItemDialog.ITEM_DESCRIPTION);
         int position = data.getIntExtra(ItemDialog.ITEM_POSITION, -1);
-        ToDoItem item = new ToDoItem(subject, description);
+        int rowid = data.getIntExtra(ItemDialog.ITEM_ROWID, -1);
 
-        if(position == -1) {
-            mToDoItems.add(item);
-        } else {
-            mToDoItems.set(position, item);
+        if(resultCode == ItemDialog.RESULT_CODE_DELETE){
+            if(position !=-1 && rowid !=-1) {//nothing to delete so do nothing
+                mToDoItems.remove(position);
+                new ToDoDbHelper((getActivity().getApplication())).deleteItem(rowid);
+                mAdapter.notifyDataSetChanged();
+            }
+
         }
+         else if(resultCode == ItemDialog.RESULT_CODE) {
+            ToDoItem item = new ToDoItem(subject, description);
+
+            if (position == -1) {
+                mToDoItems.add(item);
+            } else {
+                mToDoItems.set(position, item);
+            }
 
 
-        new ToDoDbHelper(getActivity().getApplication()).insertItem(item);
+            new ToDoDbHelper(getActivity().getApplication()).insertItem(item);
 
-        mAdapter.notifyDataSetChanged();
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -203,7 +215,8 @@ public class DayListFragment extends Fragment implements AbsListView.OnItemClick
         */
         String description = mToDoItems.get(position).getDescription();
         String subject = mToDoItems.get(position).getSubject();
-        addItem(subject, description, position);
+        int rowid = mToDoItems.get(position).getRowid();
+        addItem(subject, description, position, rowid);
 
     }
 

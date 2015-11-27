@@ -20,6 +20,7 @@ public class ToDoItem implements Parcelable{
     private String mSubject;
     private String mDescription;
     private boolean mComplete;
+    private int mRowid;
 
     /**
      * Simple object that contains the subject, description and completion state of a to-do item.
@@ -35,6 +36,14 @@ public class ToDoItem implements Parcelable{
 
 
 
+
+    public int getRowid() {
+        return mRowid;
+    }
+
+    public void setRowid(int mRowid) {
+        this.mRowid = mRowid;
+    }
 
     public String getSubject() {
         return mSubject;
@@ -88,14 +97,19 @@ public class ToDoItem implements Parcelable{
         dest.writeString(mDescription);
         dest.writeString(mSubject);
         dest.writeInt(this.getComplete()); //caste boolean to integer
+        dest.writeInt(mRowid);
 
     }
 
+    /**
+     * make sure to include all member variables in same order as they are in @writeToParcel
+     */
     private ToDoItem(Parcel in) {
 
         mDescription = in.readString();
         mSubject = in.readString();
         mComplete = in.readInt() == 1;
+        mRowid = in.readInt();
 
     }
 }

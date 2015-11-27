@@ -23,6 +23,9 @@ public class ToDoDbHelper extends SQLiteOpenHelper{
     public static final String COLUMN_DESCRIPTION = "DESCRIPTION";
     public static final String COLUMN_DATE = "EVENT_DATE";
     public static final String COLUMN_COMPLETE = "COMPLETE";
+    public static final String COLUMN_ROWID = "rowid";
+
+    private static final String GET_ROWID = "SELECT last_insert_rowid()";
 
 
 
@@ -40,13 +43,14 @@ public class ToDoDbHelper extends SQLiteOpenHelper{
     }
 
     /**
-     * Insert item into the database to store all to-do items in the application
+     * Insert item into the database to store all to-do items in the application. Once inserted
+     * the items rowid will be updated.
      * @param item the item that is to be added to the database
      * @return whether the insert was successful or not
      */
     public boolean insertItem(ToDoItem item) {
         boolean insertSuccessful = false;
-
+        int rowid=0;
         //put values into content values
         ContentValues values = new ContentValues();
 
@@ -56,11 +60,23 @@ public class ToDoDbHelper extends SQLiteOpenHelper{
 
         SQLiteDatabase db = this.getWritableDatabase();
 
+
         //attempt to insert column and return whether successful
         insertSuccessful = db.insert(TABLE_ITEM, null, values) > 0;
+        //set the row id on the item
+        item.setRowid(getRowID(db));
+
         db.close();
 
         return insertSuccessful;
+    }
+
+    private int getRowID(SQLiteDatabase db) {
+        Cursor cursor = db.rawQuery("SELECT last_insert_rowid()", null);
+        cursor.moveToFirst();
+        int rowid = cursor.getInt(0);
+        cursor.close();
+        return rowid;
     }
 
     /**
@@ -72,6 +88,7 @@ public class ToDoDbHelper extends SQLiteOpenHelper{
 
         //Columns to be used by query
         String [] columns = {
+                COLUMN_ROWID,
                 COLUMN_COMPLETE,
                 COLUMN_DESCRIPTION,
                 COLUMN_SUBJECT
@@ -94,6 +111,7 @@ public class ToDoDbHelper extends SQLiteOpenHelper{
         cursor.moveToFirst();
         for(int i=0; !cursor.isAfterLast(); i++) {
             ToDoItem item = new ToDoItem(null, null);
+            item.setRowid(cursor.getInt(cursor.getColumnIndex(COLUMN_ROWID)));
             item.setSubject(cursor.getString(cursor.getColumnIndex(COLUMN_SUBJECT)));
             item.setDescription(cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION)));
             item.setComplete(cursor.getInt(cursor.getColumnIndex(COLUMN_COMPLETE))==1);
@@ -108,9 +126,9 @@ public class ToDoDbHelper extends SQLiteOpenHelper{
 
     }
 
-    public boolean deleteItem(String subject) {
+    public boolean deleteItem(int rowid) {
         boolean successful = false;
-        String whereClaus = COLUMN_SUBJECT + "=" + subject;
+        String whereClaus = COLUMN_ROWID + "=" + rowid;
         SQLiteDatabase db = this.getWritableDatabase();
 
         successful = db.delete(TABLE_ITEM, whereClaus, null)>0;

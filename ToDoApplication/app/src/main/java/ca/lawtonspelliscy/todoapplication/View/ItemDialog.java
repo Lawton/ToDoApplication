@@ -19,7 +19,9 @@ public class ItemDialog extends DialogFragment {
     public static String ITEM_DESCRIPTION = "Description";
     public static String ITEM_SUBJECT = "Subject";
     public static String ITEM_POSITION  = "Position";
+    public static String ITEM_ROWID = "rowid";
     public static int RESULT_CODE = 2;
+    public static int RESULT_CODE_DELETE = 3;
 
     private EditText mSubjectText;
     private EditText mDescriptionText;
@@ -27,6 +29,7 @@ public class ItemDialog extends DialogFragment {
     private String mSubject;
     private String mDescription;
     private int mPosition;
+    private int mRowid;
 
 
     public ItemDialog() {
@@ -42,7 +45,7 @@ public class ItemDialog extends DialogFragment {
      * @param position the position of the item in the listview. If the item is new pass -1.
      * @return a new instance of ItemDialog with its arguments set.
      */
-    public static ItemDialog newInstance(String subject, String description, int position) {
+    public static ItemDialog newInstance(String subject, String description, int position, int rowid) {
         ItemDialog fragment = new ItemDialog();
 
         //Create bundle for arguments and pass them to the new fragment
@@ -50,6 +53,7 @@ public class ItemDialog extends DialogFragment {
         args.putString(ITEM_SUBJECT, subject);
         args.putString(ITEM_DESCRIPTION, description);
         args.putInt(ITEM_POSITION, position);
+        args.putInt(ITEM_ROWID, rowid);
         fragment.setArguments(args);
 
         //return new instance of ItemDialog
@@ -62,13 +66,15 @@ public class ItemDialog extends DialogFragment {
         mSubject = args.getString(ITEM_SUBJECT);
         mDescription = args.getString(ITEM_DESCRIPTION);
         mPosition = args.getInt(ITEM_POSITION, -1);
+        mRowid = args.getInt(ITEM_ROWID, -1);
+
 
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.ItemDialog);
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.ItemDialog);
     }
 
     @Override
@@ -85,6 +91,7 @@ public class ItemDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item, container, false);
         TextView saveText = (TextView)view.findViewById(R.id.item_save);
+        TextView deleteText = (TextView)view.findViewById(R.id.item_delete);
 
         //Get the subject editText box and set the text if subject was passed
         mSubjectText = (EditText)view.findViewById(R.id.item_subject);
@@ -103,22 +110,40 @@ public class ItemDialog extends DialogFragment {
                 sendData();
             }
         });
+        deleteText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteItem();
+            }
+        });
         return view;
     }
 
     private void sendData() {
-        Intent intent = new Intent();
         if(mSubjectText.getText().toString().equals("")) {
             Toast.makeText(getActivity(), "Subject cannot be empty.", Toast.LENGTH_SHORT).show();
         } else {
-            intent.putExtra(ITEM_DESCRIPTION, mDescriptionText.getText().toString());
-            intent.putExtra(ITEM_SUBJECT, mSubjectText.getText().toString());
-            intent.putExtra(ITEM_POSITION, mPosition);
+            Intent intent = createIntent();
             getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_CODE, intent);
             this.dismiss();
 
         }
 
+    }
+
+    private void deleteItem() {
+        Intent intent = createIntent();
+        getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_CODE_DELETE, intent);
+        this.dismiss();
+    }
+
+    private Intent createIntent() {
+        Intent intent = new Intent();
+        intent.putExtra(ITEM_DESCRIPTION, mDescriptionText.getText().toString());
+        intent.putExtra(ITEM_SUBJECT, mSubjectText.getText().toString());
+        intent.putExtra(ITEM_POSITION, mPosition);
+        intent.putExtra(ITEM_ROWID,mRowid);
+        return intent;
     }
 
 }
