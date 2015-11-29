@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import ca.lawtonspelliscy.todoapplication.R;
 
@@ -31,6 +33,7 @@ public class ToDoItemArrayAdapter extends ArrayAdapter{
         super(context, R.layout.task_row, values);
         this.mContext = context;
         this.mValues = values;
+        //sortValues();
     }
 
     @Override
@@ -58,6 +61,7 @@ public class ToDoItemArrayAdapter extends ArrayAdapter{
                     item.setComplete(true);
                 }
                 new ToDoDbHelper(rowView.getContext()).updateItemComplete(item.getComplete(), item.getRowid());
+                notifyDataSetChanged();
             }
         });
         if(item.isComplete()) {
@@ -67,6 +71,22 @@ public class ToDoItemArrayAdapter extends ArrayAdapter{
         }
 
         return rowView;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        sortValues();
+        super.notifyDataSetChanged();
+    }
+
+    private void sortValues() {
+        Collections.sort(mValues, new Comparator<ToDoItem>() {
+            @Override
+            public int compare(ToDoItem item1, ToDoItem item2) {
+                return item1.getComplete() - item2.getComplete();
+            }
+        });
+        //this.notifyDataSetChanged();
     }
 
 }

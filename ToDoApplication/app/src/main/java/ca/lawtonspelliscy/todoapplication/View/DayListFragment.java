@@ -115,7 +115,9 @@ public class DayListFragment extends Fragment implements AbsListView.OnItemClick
         mListView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
-        //TODO get the empty text to display when list is empty
+        //need to manually set the empty view to show empty text
+        TextView textView = (TextView)view.findViewById(R.id.day_empty);
+        mListView.setEmptyView(textView);
         this.setEmptyText("Nothing ToDo today!");
 
         // Set OnItemClickListener so we can be notified on item clicks

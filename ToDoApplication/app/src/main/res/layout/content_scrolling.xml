@@ -17,7 +17,8 @@
             android:id = "@+id/day_content_list"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:drawSelectorOnTop="false"/>
+            android:drawSelectorOnTop="false"
+            android:animateLayoutChanges="true"/>
 
         <TextView android:id="@android:id/empty" android:layout_width="match_parent"
             android:layout_height="match_parent" android:gravity="center" />
