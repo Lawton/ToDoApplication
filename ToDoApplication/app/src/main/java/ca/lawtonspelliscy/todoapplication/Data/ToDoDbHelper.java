@@ -193,6 +193,7 @@ public class ToDoDbHelper extends SQLiteOpenHelper{
 
     }
 
+    //test push
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ITEM);
