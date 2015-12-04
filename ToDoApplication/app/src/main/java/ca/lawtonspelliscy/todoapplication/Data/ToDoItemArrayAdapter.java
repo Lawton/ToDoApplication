@@ -36,6 +36,7 @@ public class ToDoItemArrayAdapter extends ArrayAdapter{
         //sortValues();
     }
 
+    //look into ViewHolder pattern
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

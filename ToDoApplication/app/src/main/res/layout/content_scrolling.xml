@@ -9,20 +9,15 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_day_to_do_list" tools:context=".DayToDoList">
 
-    <LinearLayout
+    <ListView
+        android:id = "@+id/day_content_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <ListView
-            android:id = "@+id/day_content_list"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:drawSelectorOnTop="false"
-            android:animateLayoutChanges="true"/>
+        android:layout_height="fill_parent"
+        android:drawSelectorOnTop="false"
+        android:animateLayoutChanges="true"/>
 
-        <TextView android:id="@android:id/empty" android:layout_width="match_parent"
-            android:layout_height="match_parent" android:gravity="center" />
-    </LinearLayout>
+    <TextView android:id="@android:id/empty" android:layout_width="match_parent"
+        android:layout_height="match_parent" android:gravity="center" />
     <android.support.design.widget.FloatingActionButton android:id="@+id/add_item"
     android:layout_width="wrap_content" android:layout_height="wrap_content"
     android:layout_margin="@dimen/fab_margin"
